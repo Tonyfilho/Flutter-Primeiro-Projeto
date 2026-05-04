@@ -42,7 +42,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyCjkXXCf5euXxVTWzbfkcCJf-4lga8vZxI',
-    appId: '1:42155495380:web:7f3ae8d803dda0eecf9041',
+    appId: '1:42155495380:web:7f0de647894bb85bcf9041',
     messagingSenderId: '42155495380',
     projectId: 'fluterweb01',
     authDomain: 'fluterweb01.firebaseapp.com',
@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '42155495380',
     projectId: 'fluterweb01',
     storageBucket: 'fluterweb01.firebasestorage.app',
+    iosClientId: '42155495380-3foaroa8i9k19ba60afmght57o5ngjl0.apps.googleusercontent.com',
     iosBundleId: 'pt.tony.primeiroProjeto',
   );
 
@@ -72,6 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '42155495380',
     projectId: 'fluterweb01',
     storageBucket: 'fluterweb01.firebasestorage.app',
+    iosClientId: '42155495380-3foaroa8i9k19ba60afmght57o5ngjl0.apps.googleusercontent.com',
     iosBundleId: 'pt.tony.primeiroProjeto',
   );
 
@@ -83,4 +85,5 @@ class DefaultFirebaseOptions {
     authDomain: 'fluterweb01.firebaseapp.com',
     storageBucket: 'fluterweb01.firebasestorage.app',
   );
+
 }
