@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/screens/register_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -89,7 +90,18 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 16),
 
                     ///criaremos Textbotton onde passaremos um link de cadastro
-                    TextButton(onPressed: () {}, child: Text("If dont have account pls Sign Up")),
+                    TextButton(
+                      onPressed: () {
+                        ///usaremos este construtor para mudar de rota e carregar a outra tela
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => RegisterScreen(),
+                          ),
+                        );
+                      },
+                      child: Text("If dont have account pls Sign Up"),
+                    ),
                   ],
                 ),
               ),
