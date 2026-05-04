@@ -84,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {},
-                      child: Text("Loggin with Goggle"),
+                      child: Text("Sign In With Goggle"),
                     ),
                     SizedBox(height: 16),
 
