@@ -89,7 +89,7 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(height: 16),
 
                     ///criaremos Textbotton onde passaremos um link de cadastro
-                    TextButton(onPressed: () {}, child: Text("Sign Up")),
+                    TextButton(onPressed: () {}, child: Text("If dont have account pls Sign Up")),
                   ],
                 ),
               ),
