@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:primeiro_projeto/screens/register_screen.dart';
+import 'package:primeiro_projeto/services/auth_services.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -9,6 +10,8 @@ class LoginScreen extends StatelessWidget {
 
   ///variavel do formulario de senha
   final TextEditingController _senhaController = TextEditingController();
+
+  final AuthServices _authServices = AuthServices();
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +81,15 @@ class LoginScreen extends StatelessWidget {
 
                     ///apos isto adcionaremos um botão, que temos de passar um função
                     ///OBS: O filho do Botão pode ser outro Widget, ou uma função neste caso um texto
-                    ElevatedButton(onPressed: () {}, child: Text("Sign In")),
+                    ElevatedButton(
+                      onPressed: () {
+                        _authServices.signInUser(
+                          email: _emailController.text,
+                          password: _emailController.text,
+                        );
+                      },
+                      child: Text("Sign In"),
+                    ),
 
                     ///colocaremos um 1 botão
                     ///temos que por o espaço para começar

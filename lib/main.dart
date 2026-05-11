@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:primeiro_projeto/screens/loggin_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/services/roteador_telas.dart';
+
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -19,7 +20,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
-      home: LoginScreen(),
+      ///vamos mudar agora usaremos o firebase q direcionará qual tela devemos usar.
+      ///com isto vamos criar um gerenciador de telas no lugar do LoginScren();
+      ///Criaremos ums Stateless 
+     /// home: LoginScreen(),
+      home: RouterScreen(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/services/auth_services.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -8,6 +9,7 @@ class RegisterScreen extends StatelessWidget {
   final TextEditingController _senhaControlle = TextEditingController();
   final TextEditingController _confirmaSenhaControlle = TextEditingController();
   final TextEditingController _nomeControlle = TextEditingController();
+  final AuthServices  _authServices = AuthServices();
 
   @override
   Widget build(BuildContext context) {
@@ -76,12 +78,54 @@ class RegisterScreen extends StatelessWidget {
                       controller: _confirmaSenhaControlle,
                       decoration: InputDecoration(hintText: "Confirm Password"),
                     ),
-                     SizedBox(height: 16),
-                     /// 14º criaremos o botãopara enviar o cadastro em forma de Widget
-                     ElevatedButton(onPressed: (){
-                      
-                     }, child: Text("Register !!!")),
-                     SizedBox(height: 16),
+                    SizedBox(height: 16),
+
+                    /// 14º criaremos o botãopara enviar o cadastro em forma de Widget
+                    ElevatedButton(
+                      onPressed: () {
+                        /***Temos q criar a função onde checaremos a validade da senha */
+                        if (_senhaControlle.text ==
+                            _confirmaSenhaControlle.text) {
+                          _authServices
+                              .signUpUser(
+                                email: _emailControlle.text,
+                                password: _senhaControlle.text,
+                                name: _nomeControlle.text,
+                              )
+                              ///o retorno do metodo é uma String ou nulo, vej o service
+                              .then((String? erro) {
+                                ///se tiver erro de context(carregamento), retorno
+                                if (!context.mounted) {
+                                  return;
+                                }
+                                if (erro != null) {
+                                  ///Criando um SnackBar de erro
+                                  final snackBar = SnackBar(
+                                    content: Text(erro),
+                                    backgroundColor: Colors.red[400],
+                                  );
+
+                                  ///ScaffoldMessenger serve para mostrar o snackBar criado
+                                  ScaffoldMessenger.of(
+                                    context,
+                                  ).showSnackBar(snackBar);
+                                } else {
+                                  ///caso não tenha erro, volteremos para tela anterior, 
+                                  Navigator.pop(context);
+                                }
+                              });
+                        } else {
+                          ///se a senha estiver errada
+                          const snackBar = SnackBar(
+                            content: Text("Password Not Match"),
+                            backgroundColor: Colors.red,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
+                      child: Text("Register Now !!!"),
+                    ),
+                    SizedBox(height: 16),
                   ],
                 ),
               ),
