@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/components/menu.dart';
 import 'package:primeiro_projeto/models/hours.dart';
 
 ///esta tela será com dados mutáveis, por isto q temos que por StateFull
@@ -31,9 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ///aqui será a parte do User q vem do firebase
     return Scaffold(
-      ///teremos um drawer
-      drawer: Menu(user: widget.user),
+      ///teremos um drawer que recebe um menu
+      drawer: Menu(user: widget.user!),
       appBar: AppBar(title: Text("1º App de  Horas")),
 
       ///teremos o botão
@@ -61,9 +63,75 @@ class _HomeScreenState extends State<HomeScreen> {
 
               ///dentro desta lista temos  filhos, que recebem uma list do tipo generate e tamanho da list
               children: List.generate(listHours.length, (i) {
-                Hours localHour = listHours[i];
+                Hours model = listHours[i];
+
+                ///fazer com que quando passe o dedo e arraste exclui
+                ///a chave vamos pegar do Horas
+                ///Uma direção de exlusão do final para começo
+                ///um background container para ficar no fundo do icone, quando estivermos exluindo algo, o fundo será este container
+                return Dismissible(
+                  key: ValueKey<Hours>(model),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    ///aqui temos um alinhamento
+                    alignment: Alignment.centerRight,
+
+                    ///adcionaremos um padding
+                    padding: const EdgeInsets.only(right: 12),
+
+                    ///teremos uma cor
+                    color: Colors.red,
+
+                    /// teremos um child onde colocaremos  icone de uma delete
+                    child: Icon(Icons.delete, color: Colors.white),
+                  ),
+
+                  ///em nosso ondismissed termos q por uma direção
+                  onDismissed: (direction) {
+                    ///remove será um função criada para remover do firestorage
+                    remove(model);
+                  },
+
+                  ///este child será um cards
+                  child: Card(
+                    elevation: 2,
+
+                    ///o filho será uma coluna
+                    child: Column(
+                      ///aqui dentro teremos varios filho, varias linhas ou campos
+                      ///quando temos um card temos algumas propriedades
+                      children: [
+                        ListTile(
+                          ///uma das propriedades é LONGPRESS , quando ficarmos precionado teremos um EVENTO de click
+                          onLongPress: () {
+                            ///neste caso vamos mostrar uns itens
+                            ///criaremos uma função para destar algo na tela
+                            
+                          },
+                          ///teremos outro evento de clicar na TELA e na lista 
+                          onTap: () {
+
+                          },
+                          ///leading é para ficcar algo ao lado da coluna, como se fosse um icone
+                          leading: Icon(Icons.list_alt_rounded, size:56 ,),
+                          ///colocaremos um texto no meu do card
+                          ///com data e hora
+                          title: Text("Date: ${model.data} Hours: ${model.minutos}"),
+                          ///aqui na parte de baixo teremos o Subtitle
+                          subtitle: Text(model.descricao ?? 'Not Data'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+
+                ///temos o Ondimissible
               }),
             ),
     );
   }
+void remove(Hours model) {
+  ///falta implementar o firestorage aqui no remove
 }
+}
+
