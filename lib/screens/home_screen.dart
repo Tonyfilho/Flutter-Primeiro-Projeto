@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:primeiro_projeto/components/menu.dart';
+import 'package:primeiro_projeto/helpers/hour_helpers.dart';
 import 'package:primeiro_projeto/models/hours.dart';
 
 ///esta tela será com dados mutáveis, por isto q temos que por StateFull
@@ -115,8 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ///leading é para ficcar algo ao lado da coluna, como se fosse um icone
                           leading: Icon(Icons.list_alt_rounded, size:56 ,),
                           ///colocaremos um texto no meu do card
-                          ///com data e hora
-                          title: Text("Date: ${model.data} Hours: ${model.minutos}"),
+                          ///com data e hora usando a classe helpers
+                          title: Text("Date: ${model.data} Hours: ${HourHelpers.minutesToHours(model.minutos)}"),
                           ///aqui na parte de baixo teremos o Subtitle
                           subtitle: Text(model.descricao ?? 'Not Data'),
                         ),

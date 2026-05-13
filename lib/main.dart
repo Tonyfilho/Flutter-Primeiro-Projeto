@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:primeiro_projeto/services/roteador_telas.dart';
+import 'package:primeiro_projeto/screens/roteador_telas.dart';
 
 import 'firebase_options.dart';
 
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '1º Projeto',
+      title: '1º Projeto Horas V3',
 
       ///  theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
       theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
