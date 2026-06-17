@@ -4,8 +4,11 @@ import 'package:primeiro_projeto/helpers/hour_helpers.dart';
 import 'package:primeiro_projeto/models/hours.dart';
 import 'package:uuid/uuid.dart';
 
-class FormModal extends StatelessWidget {
-  FormModal({super.key});
+class FormModalHelper {
+  FormModalHelper({required this.model, required this.context});
+
+  final Hours? model;
+  final BuildContext context;
 
   ///este metodo será usado para cadastrar e para editar
   String _title = "Add";
@@ -28,22 +31,21 @@ class FormModal extends StatelessWidget {
 
   final TextEditingController _descricaoController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-
-  ///Metodo ShowFormModel
-  void showFormModal({Hours? model, BuildContext? context}) {
+  // @override
+  // Widget build(BuildContext context) {
+  //   return const Placeholder();
+  // }
+///Metodo ShowFormModel
+  void showFormModal() {
     ///faremos as verificações
     if (model != null) {
       _title = "Edit";
-      _dataController.text = model.data;
-      _minutesController.text = HourHelpers.minutesToHours(model.minutos);
+      _dataController.text = model!.data;
+      _minutesController.text = HourHelpers.minutesToHours(model!.minutos);
 
       ///apesar de fazer a verificação mesmo assim temos que usar "!"
-      if (model.descricao != null) {
-        _descricaoController.text = model.descricao!;
+      if (model!.descricao != null) {
+        _descricaoController.text = model!.descricao!;
       }
       // _confirmationButton = "Update";
       // _skipButton = "Quit";
@@ -54,7 +56,7 @@ class FormModal extends StatelessWidget {
     ///aqui verificaremos o tamnho da tela e devolveremos um Container()
     /// o contexto vai buscar todas as informação da tela , ex tamanho, espaço etc.
     showModalBottomSheet(
-      context: context!,
+      context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -149,7 +151,9 @@ class FormModal extends StatelessWidget {
                       Hours hours = Hours(
                         id: const Uuid().v1(),
                         data: _dataController.text,
-                        minutos: HourHelpers.hoursToMinutos(_minutesController.text),
+                        minutos: HourHelpers.hoursToMinutos(
+                          _minutesController.text,
+                        ),
                       );
                     },
                     child: Text(_confirmationButton),
@@ -165,4 +169,6 @@ class FormModal extends StatelessWidget {
       },
     );
   }
+
+  
 }

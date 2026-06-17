@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:primeiro_projeto/components/menu.dart';
 import 'package:primeiro_projeto/helpers/hour_helpers.dart';
 import 'package:primeiro_projeto/models/hours.dart';
+import 'package:uuid/uuid.dart';
 
 ///esta tela será com dados mutáveis, por isto q temos que por StateFull
 class HomeScreen extends StatefulWidget {
@@ -42,7 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ///teremos o botão
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          /***Temos que criar a função do botão */
+          /***Temos que criar a função do botão e mostrar o formulário*/
+          showFormModal(null);
+
         },
 
         ///colocaaremos um icone de adcionar
@@ -107,17 +111,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           onLongPress: () {
                             ///neste caso vamos mostrar uns itens
                             ///criaremos uma função para destar algo na tela
-                            
                           },
-                          ///teremos outro evento de clicar na TELA e na lista 
-                          onTap: () {
 
-                          },
+                          ///teremos outro evento de clicar na TELA e na lista
+                          onTap: () {},
+
                           ///leading é para ficcar algo ao lado da coluna, como se fosse um icone
-                          leading: Icon(Icons.list_alt_rounded, size:56 ,),
+                          leading: Icon(Icons.list_alt_rounded, size: 56),
+
                           ///colocaremos um texto no meu do card
                           ///com data e hora usando a classe helpers
-                          title: Text("Date: ${model.data} Hours: ${HourHelpers.minutesToHours(model.minutos)}"),
+                          title: Text(
+                            "Date: ${model.data} Hours: ${HourHelpers.minutesToHours(model.minutos)}",
+                          ),
+
                           ///aqui na parte de baixo teremos o Subtitle
                           subtitle: Text(model.descricao ?? 'Not Data'),
                         ),
@@ -131,8 +138,182 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
     );
   }
-void remove(Hours model) {
-  ///falta implementar o firestorage aqui no remove
-}
-}
 
+  showFormModal(Hours? model) {
+    ///este metodo será usado para cadastrar e para editar
+    ///este metodo será usado para cadastrar e para editar
+    String title = "Add";
+    final String confirmationButton = "Save";
+    final String skipButton = "Cancel";
+
+    ///usaremos os controladores e temos q instalar este plugins
+    /// flutter pub add mask_text_input_formatter
+
+    /// começaremos fazendo o form
+    final TextEditingController dataController = TextEditingController();
+
+    ///criaremos a primeira mascara
+    final dataMaskFormatter = MaskTextInputFormatter(mask: '##/##/####');
+
+    final TextEditingController minutesController = TextEditingController();
+
+    ///criando a segunda mascara
+    final minutesMaskFormatter = MaskTextInputFormatter(mask: '##:##');
+
+    final TextEditingController descricaoController = TextEditingController();
+    if (model != null) {
+      title = "Edit";
+      dataController.text = model.data;
+      minutesController.text = HourHelpers.minutesToHours(model.minutos);
+
+      ///apesar de fazer a verificação mesmo assim temos que usar "!"
+      if (model.descricao != null) {
+        descricaoController.text = model.descricao!;
+      }
+      // _confirmationButton = "Update";
+      // _skipButton = "Quit";
+    }
+
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (context) {
+        ///verificaremos o tamanho da telea por isto temos o container.
+        return Container(
+          ///of(context) pega o tamnho da tela com base no contexto
+          height: MediaQuery.of(context).size.height,
+          padding: EdgeInsets.all(32),
+
+          ///temos criar um child onde startarmos o ListView onde formataremos e mostraremos como
+          ///deve ser digitado pelo user no form
+          child: ListView(
+            children: [
+              ///aqui termos uma lista de campos
+              ///teremos o texto com tilulo e  contexto e tamnho do texto
+              Text(title, style: Theme.of(context).textTheme.headlineSmall),
+
+              ///aqui teremos os outros campos do form
+              TextFormField(
+                ///um controlador que ja traz a data aplicada
+                controller: dataController,
+
+                ///um formatador de data para ajuda com o teclado
+                keyboardType: TextInputType.datetime,
+
+                /// é uma decoração do texto que devemos digitar, é um exemplo visual
+                decoration: InputDecoration(
+                  hintText: '01/01/2000',
+                  labelText: 'Date',
+                ),
+
+                ///logo apos temos que ter o formador de imput, e aplica o formatador, a variavel que fizemos para formatar.
+                inputFormatters: [dataMaskFormatter],
+              ),
+
+              ///daremos um espaço na linha
+              const SizedBox(height: 16),
+              TextFormField(
+                ///um controlador que ja traz a minuto aplicado
+                controller: minutesController,
+
+                ///um formatador de data para ajuda com o teclado
+                keyboardType: TextInputType.number,
+
+                /// é uma decoração do texto que devemos digitar, é um exemplo visual
+                decoration: InputDecoration(
+                  hintText: '00:00',
+                  labelText: 'Hours',
+                ),
+                inputFormatters: [minutesMaskFormatter],
+              ),
+
+              ///daremos um espaço na linha
+              const SizedBox(height: 16),
+
+              ///e terremos outro textForm com outros campos
+              TextFormField(
+                controller: descricaoController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: 'Tell us what you made durring the workdays',
+                  labelText: 'Workday descriptions',
+                ),
+              ),
+
+              ///daremos um espaço na linha
+              const SizedBox(height: 16),
+
+              ///adicionaremos uma linha, de dentro da linah temos varias coia, por isto do children[]
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      ///como é um modal isto ficará na frente da tela então não temos rota da tela
+                      ///usaremos um popup de navegação, para usuario voltar
+                      Navigator.pop(context);
+                    },
+
+                    ///aqui daremos nome ao botão
+                    child: Text(skipButton),
+                  ),
+
+                  ///teremos um espaço agora na largura e não na altura pois estamos dentro de uma linha
+                  const SizedBox(width: 16),
+
+                  ///temos nosso botão de salvar no firebase, e para isto temos q criar uma instancia de horas, e passar os dados do form para o firebase
+                  ElevatedButton(
+                    onPressed: () {
+                      ///criaremos a instacia de horas, usamos Uuid() gerar uma ID nã repedito,temos q intalar um pacote
+                      /// passa o data controle e converter de oras para minutos
+                      Hours hours = Hours(
+                        id: const Uuid().v1(),
+                        data: dataController.text,
+                        minutos: HourHelpers.hoursToMinutos(
+                          minutesController.text,
+                        ),
+                      );
+                      if (descricaoController.text.isNotEmpty) {
+                        ///lembrandro que a descrição é opcional, por isto temos q fazer uma verificação se o campo esta vazio ou não
+                        hours.descricao = descricaoController.text;
+                      }
+                      if (model != null) {
+                        ///se o model for diferente de nulo, então é uma edição, e temos q passar o id do model para o hours q ja existe no firebase, para não criar um novo registro e sim atualizar o existente
+                        hours.id = model.id;
+                      }
+
+                      ///salvando no firestore
+                      db
+                          .collection(widget.user!.uid)
+                          .doc(hours.id)
+                          .set(hours.toMap());
+
+                      ///visualizar o retorno do firebase, para ver se esta salvando corretamente
+                      ///criaremos um metodo para mostrar o retorno do firebase, e depois chamaremos este metodo aqui
+                      reFresh();
+
+                      Navigator.pop(context);
+                    },
+                    child: Text(confirmationButton),
+                  ),
+                ],
+              ),
+
+              ///so lembrando que isto ficará dentro de um coluna no componente principal
+              const SizedBox(height: 180),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void remove(Hours model) {
+    ///falta implementar o firestorage aqui no remove
+    db.collection(widget.user!.uid).doc(model.id).delete();
+    reFresh();
+  }
+  
+  void reFresh() {}
+}
