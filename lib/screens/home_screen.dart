@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           /***Temos que criar a função do botão e mostrar o formulário*/
-          showFormModal(null);
+          showFormModal();
         },
 
         ///colocaaremos um icone de adcionar
@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onLongPress: () {
                             ///neste caso vamos mostrar uns itens
                             ///criaremos uma função para destar algo na tela
-                            showFormModal(model);
+                            showFormModal();
                           },
 
                           ///teremos outro evento de clicar na TELA e na lista
@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void showFormModal(Hours? model) {
+  void showFormModal({Hours? model}) {
     ///este metodo será usado para cadastrar e para editar
     ///este metodo será usado para cadastrar e para editar
     String title = "Add";
@@ -333,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void reFleshComThen() {
+  void reFreshComThen() {
     double total = 0;
     List<Hours> temp = [];
     Future<QuerySnapshot<Map<String, dynamic>>> future = db
@@ -354,7 +354,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> reFleshComAsync() async {
+  Future<void> reFreshComAsync() async {
     double total = 0;
     List<Hours> temp = [];
     QuerySnapshot<Map<String, dynamic>> snapshot = await db
