@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_projeto/screens/home_screen.dart';
 import 'package:primeiro_projeto/screens/register_screen.dart';
 import 'package:primeiro_projeto/services/auth_services.dart';
 
@@ -85,8 +86,18 @@ class LoginScreen extends StatelessWidget {
                       onPressed: () {
                         _authServices.signInUser(
                           email: _emailController.text,
-                          password: _emailController.text,
-                        );
+                          password: _senhaController.text,
+                        ).then((user) {
+                          ///a navegação esta sendo feita pela tela de roteamento, mas podemos fazer a navegação de outra forma, como abaixo
+                          // if (user != null) {
+                          //   Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => HomeScreen(),
+                          //     ),
+                          //   );
+                          // }
+                        });
                       },
                       child: Text("Sign In"),
                     ),

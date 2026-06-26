@@ -26,9 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
   FirebaseFirestore db = FirebaseFirestore.instance;
 
   ///teremos um @verride no metodo initState para depois mudar o comportamento do InitState
+  /// é o contrutor como do angular. o OnInit();
   @override
   void initState() {
     super.initState();
+    reFresh();
 
     ///temos q criar um setup do firebase aqui antes e depois
   }
@@ -46,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           /***Temos que criar a função do botão e mostrar o formulário*/
           showFormModal(null);
-
         },
 
         ///colocaaremos um icone de adcionar
@@ -111,6 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onLongPress: () {
                             ///neste caso vamos mostrar uns itens
                             ///criaremos uma função para destar algo na tela
+                            showFormModal(model);
                           },
 
                           ///teremos outro evento de clicar na TELA e na lista
@@ -139,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  showFormModal(Hours? model) {
+  void showFormModal(Hours? model) {
     ///este metodo será usado para cadastrar e para editar
     ///este metodo será usado para cadastrar e para editar
     String title = "Add";
@@ -314,6 +316,57 @@ class _HomeScreenState extends State<HomeScreen> {
     db.collection(widget.user!.uid).doc(model.id).delete();
     reFresh();
   }
-  
-  void reFresh() {}
+
+  void reFresh() {
+    double total = 0;
+    List<Hours> temp = [];
+    db.collection(widget.user!.uid).get().then((value) {
+      for (var doc in value.docs) {
+        Hours hours = Hours.fromMap(doc.data());
+        temp.add(hours);
+        total += hours.minutos;
+      }
+
+      setState(() {
+        listHours = temp;
+      });
+    });
+  }
+
+  void reFleshComThen() {
+    double total = 0;
+    List<Hours> temp = [];
+    Future<QuerySnapshot<Map<String, dynamic>>> future = db
+        .collection(widget.user!.uid)
+        .get();
+
+    future.then(
+      (onValue) => {
+        onValue.docs.forEach((doc) {
+          Hours hours = Hours.fromMap(doc.data());
+          temp.add(hours);
+          total += hours.minutos;
+        }),
+        setState(() {
+          listHours = temp;
+        }),
+      },
+    );
+  }
+
+  Future<void> reFleshComAsync() async {
+    double total = 0;
+    List<Hours> temp = [];
+    QuerySnapshot<Map<String, dynamic>> snapshot = await db
+        .collection(widget.user!.uid)
+        .get();
+     for (var doc in snapshot.docs) {
+        Hours hours = Hours.fromMap(doc.data());
+        temp.add(hours);
+        total += hours.minutos;
+      };
+    setState(() {
+      listHours = temp;
+    });
+  }
 }
